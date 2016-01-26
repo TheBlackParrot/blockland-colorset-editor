@@ -55,6 +55,7 @@ textarea {
 	outline: 0;
 	width: 100%;
 	height: calc(100% - 48px);
+	resize: none;
 }
 input[type="file"] {
 	outline: 0;
