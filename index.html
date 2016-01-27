@@ -4,7 +4,10 @@
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 
+	<link rel="stylesheet" type="text/css" href="js/jquery-ui/jquery-ui.css">
+
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui/jquery-ui.min.js"></script>
 
 	<title>Blockland Colorset Editor</title>
 </head>
@@ -13,6 +16,28 @@
 	<div class="wrapper">
 		<div class="side_input">
 			<textarea id="textInput" onkeyup="setActiveCell();" onmouseup="setActiveCell();"></textarea>
+			<div class="sliders">
+				<div class="slide_wrap">
+					<span style="float: left;">R</span>
+					<div id="colorModR" class="slider"></div>
+					<span style="float: right;" class="slider_value">255</span>
+				</div>
+				<div class="slide_wrap">
+					<span style="float: left;">G</span>
+					<div id="colorModG" class="slider"></div>
+					<span style="float: right;" class="slider_value">255</span>
+				</div>
+				<div class="slide_wrap">
+					<span style="float: left;">B</span>
+					<div id="colorModB" class="slider"></div>
+					<span style="float: right;" class="slider_value">255</span>
+				</div>
+				<div class="slide_wrap">
+					<span style="float: left;">A</span>
+					<div id="colorModA" class="slider"></div>
+					<span style="float: right;" class="slider_value">255</span>
+				</div>
+			</div>
 			<div class="buttons">
 				<input type="file" id="fileToLoad" style="display: none;"/>
 				<a class="button" style="background-color: #2d7;" id="fileWorkaround">Import</a>

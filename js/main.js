@@ -52,6 +52,8 @@ function loadFileAsText(callback)
 
 
 var previousCell = -1;
+var activeLine = -1;
+
 function setActiveCell() {
 	var textarea = document.getElementById("textInput");
 
@@ -71,19 +73,42 @@ function setActiveCell() {
 
 	// god bless
 	var currentLineNum = textarea.value.substr(0, textarea.selectionStart).split("\n").length;
+	activeLine = (currentLineNum-1);
 	var currentLines = textarea.value.split("\n");
 	var currentLine = currentLines[currentLineNum-1];
 	var cell = lines.indexOf(currentLine);
+	console.log(cell);
+
+	var color = currentLine.split(" ");
 
 	if(cell != previousCell) {
-		$(".color[index=" + previousCell + "]").css("border", "1px solid rgba(255, 255, 255, 0.33)");
-		$(".color[index=" + previousCell + "]").css("box-shadow", "none");
+		$(".color[index=" + previousCell + "]").removeClass("active_color");
 	}
 
-	$(".color[index=" + cell + "]").css("border", "1px solid #fff");
-	$(".color[index=" + cell + "]").css("box-shadow", "inset 0px 0px 16px #fff");
+	$(".color[index=" + cell + "]").addClass("active_color");
 
 	previousCell = cell;
+
+	if(cell == -1) {
+		$("#colorModR").slider("option", "disabled", true);
+		$("#colorModG").slider("option", "disabled", true);
+		$("#colorModB").slider("option", "disabled", true);
+		$("#colorModA").slider("option", "disabled", true);
+	} else {
+		$("#colorModR").slider("option", "disabled", false);
+		$("#colorModR").slider("option", "value", color[0]);
+		$("#colorModG").slider("option", "disabled", false);
+		$("#colorModG").slider("option", "value", color[1]);
+		$("#colorModB").slider("option", "disabled", false);
+		$("#colorModB").slider("option", "value", color[2]);
+		$("#colorModA").slider("option", "disabled", false);
+		$("#colorModA").slider("option", "value", color[3]);
+
+		var toDisable = "ABGR";
+		for(var i = 0; i < 4-color.length; i++) {
+			$("#colorMod" + toDisable[i]).slider("option", "disabled", true);
+		}
+	}
 }
 
 $('#textInput').bind('input propertychange', function() {
@@ -135,6 +160,115 @@ $("#fileToLoad").on("change", function(){
 	setTimeout(function(){
 		$('#textInput').trigger('input');
 	}, 100);
+});
+
+function updateTextInput(slider, value) {
+	var textarea = document.getElementById("textInput");
+
+	var lines = textarea.value.split('\n');
+
+	var color = lines[activeLine].split(" ");
+	
+	switch(slider) {
+		case "R":
+			color[0] = value;
+			break;
+
+		case "G":
+			color[1] = value;
+			break;
+
+		case "B":
+			color[2] = value;
+			break;
+
+		case "A":
+			color[3] = value;
+			break;
+	}
+
+	moddedColor = color.join(" ");
+	lines[activeLine] = moddedColor;
+
+	textarea.value = lines.join("\n");
+
+	$('#textInput').trigger('input');
+}
+
+$("#colorModR").slider({
+	max: 255,
+	min: 0,
+	disabled: true
+});
+
+$("#colorModR").on("slide slidechange", function(event, ui){
+	var value = $(this).slider("value");
+	if(isNaN(value)) {
+		$(this).parent().find(".slider_value").text("-");
+		return;
+	}
+	
+	var which = $(this).parent().find("span:first-child").text();
+
+	$(this).parent().find(".slider_value").text(value);
+	updateTextInput(which, value);
+});
+
+$("#colorModG").slider({
+	max: 255,
+	min: 0,
+	disabled: true
+});
+
+$("#colorModG").on("slide slidechange", function(event, ui){
+	var value = $(this).slider("value");
+	if(isNaN(value)) {
+		$(this).parent().find(".slider_value").text("-");
+		return;
+	}
+
+	var which = $(this).parent().find("span:first-child").text();
+
+	$(this).parent().find(".slider_value").text(value);
+	updateTextInput(which, value);
+});
+
+$("#colorModB").slider({
+	max: 255,
+	min: 0,
+	disabled: true
+});
+
+$("#colorModB").on("slide slidechange", function(event, ui){
+	var value = $(this).slider("value");
+	if(isNaN(value)) {
+		$(this).parent().find(".slider_value").text("-");
+		return;
+	}
+
+	var which = $(this).parent().find("span:first-child").text();
+
+	$(this).parent().find(".slider_value").text(value);
+	updateTextInput(which, value);
+});
+
+$("#colorModA").slider({
+	max: 255,
+	min: 0,
+	disabled: true
+});
+
+$("#colorModA").on("slide slidechange", function(event, ui){
+	var value = $(this).slider("value");
+	if(isNaN(value)) {
+		$(this).parent().find(".slider_value").text("-");
+		return;
+	}
+
+	var which = $(this).parent().find("span:first-child").text();
+
+	$(this).parent().find(".slider_value").text(value);
+	updateTextInput(which, value);
 });
 
 console.log("JS loaded");
